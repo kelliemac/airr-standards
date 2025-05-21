@@ -123,7 +123,7 @@ read_alignment <- function(file, base=c("1", "0"), ...) {
 #' @return   A named nested \code{list} contained in the AIRR Data Model with the top-level
 #'           names reflecting the individual AIRR objects.
 #'                   
-#' @seealso 
+#' @seealso  
 #' See \link{Schema} for the AIRR schema definition objects.
 #' See \link{write_airr} for writing AIRR Data Model records in YAML or JSON format.
 #' 
@@ -257,7 +257,7 @@ read_airr_json <- function(file, validate=TRUE, model=TRUE) {
 #' @seealso
 #' See \link{Schema} for the AIRR schema object definition.
 #' See \link{read_tabular} for reading to AIRR files.
-#'
+#' 
 #' @examples
 #' # Get path to the rearrangement-example file
 #' file <- system.file("extdata", "rearrangement-example.tsv.gz", package="airr")
@@ -340,13 +340,13 @@ write_rearrangement <- function(data, file, base=c("1", "0"), ...) {
 
 #' @details
 #' \code{write_alignment} writes a \code{data.frame} containing AIRR Alignment data to TSV.
-#'
+#' 
 #' @rdname write_tabular
 #' @export
 write_alignment <- function(data, file, base=c("1", "0"), ...) {
     msg <- paste("write_alignment is deprecated and will be removed in a future release.",
                  "Use write_tabular with the argument schema=AlignmentSchema instead.",
-                 "See help(\"Deprecated\")",
+                 "See help(\"Deprecated\")", 
                  sep="\n")
     .Deprecated(msg=msg)
     write_tabular(data, file, base=base, schema=AlignmentSchema, ...)
@@ -355,7 +355,7 @@ write_alignment <- function(data, file, base=c("1", "0"), ...) {
 #### Write YAML/JSON ####
 
 #' Write AIRR Data Model records to YAML or JSON files
-#'
+#' 
 #' \code{write_airr} writes a YAML or JSON file containing AIRR Data Model records.
 #'
 #' @param    data      \code{list} containing AIRR Model Records.
@@ -364,13 +364,13 @@ write_alignment <- function(data, file, base=c("1", "0"), ...) {
 #'                     \code{"json"}. If \code{"auto"} (default), the format will be
 #'                     detected from the \code{file} extension.
 #' @param    validate  run schema validation prior to write if \code{TRUE}.
-#' @param    model     if \code{TRUE} validate and write only AIRR DataFile defined objects.
+#' @param    model     if \code{TRUE} validate and write only AIRR DataFile defined objects. 
 #'                     If \code{FALSE} attempt validation and write of all objects in \code{data}.
-#'
+#' 
 #' @seealso
 #' See \link{Schema} for the AIRR schema definition objects.
 #' See \link{read_airr} for reading to AIRR Data Model files.
-#'
+#' 
 #' @examples
 #' # Get path to the repertoire-example file
 #' file <- system.file("extdata", "repertoire-example.yaml", package="airr")
@@ -587,22 +587,22 @@ validate_rearrangement <- function(data) {
 #' See \link{Schema} for the AIRR schema definitions.
 #' See \link{read_airr} for loading AIRR Data Models from a file.
 #' See \link{write_airr} for writing AIRR Data Models to a file.
-#'
+#' 
 #' @examples
 #' # Get path to the rearrangement-example file
 #' f1 <- system.file("extdata", "repertoire-example.yaml", package="airr")
 #' f2 <- system.file("extdata", "germline-example.json", package="airr")
-#'
+#' 
 #' # Load data file
 #' repertoire <- read_airr(f1)
 #' germline <- read_airr(f2)
 #'
 #' # Validate a single record
 #' validate_airr(repertoire)
-#'
+#' 
 #' # Return validation for individual objects
 #' validate_airr(germline, each=TRUE)
-#'
+#' 
 #' @export
 validate_airr <- function(data, model=TRUE, each=FALSE) {
     # This is a wrapper function to allow recursive validation of the different entries in yaml file
