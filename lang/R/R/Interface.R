@@ -112,18 +112,18 @@ read_alignment <- function(file, base=c("1", "0"), ...) {
 #' \code{read_airr} loads a YAML or JSON file containing AIRR Data Model records.
 #'
 #' @param    file      path to the input file.
-#' @param    format    format of the input file. Must be one of \code{"auto"}, \code{"yaml"}, or
+#' @param    format    format of the input file. Must be one of \code{"auto"}, \code{"yaml"}, or 
 #'                     \code{"json"}. If \code{"auto"} (default), the format will be 
 #'                     detected from the \code{file} extension.
 #' @param    validate  run schema validation if \code{TRUE}.
 #' @param    model     if \code{TRUE} validate only AIRR DataFile defined objects. If \code{FALSE} 
 #'                     attempt validation of all objects in \code{data}.
 #'                     Ignored if \code{validate=FALSE}
-#'
+#' 
 #' @return   A named nested \code{list} contained in the AIRR Data Model with the top-level
 #'           names reflecting the individual AIRR objects.
 #'                   
-#' @seealso. 
+#' @seealso 
 #' See \link{Schema} for the AIRR schema definition objects.
 #' See \link{write_airr} for writing AIRR Data Model records in YAML or JSON format.
 #' 
@@ -158,30 +158,30 @@ read_airr <- function(file, format=c("auto", "yaml", "json"), validate=TRUE, mod
 }
 
 # Read an AIRR YAML file
-#
+# 
 # \code{read_airr_yaml} loads a YAML file containing AIRR Data Model records.
 #
 # @param    file      path to the YAML input file.
 # @param    validate  run schema validation if \code{TRUE}.
-# @param    model     if \code{TRUE} validate only AIRR DataFile defined objects. If \code{FALSE}
+# @param    model     if \code{TRUE} validate only AIRR DataFile defined objects. If \code{FALSE} 
 #                     attempt validation of all objects in \code{data}.
 #                     Ignored if \code{validate=FALSE}
 #
 # @return   A named nested \code{list} contained in the AIRR Data Model with the top-level
 #           names reflecting the individual AIRR objects.
 #
-# @seealso
+# @seealso  
 # See \link{Schema} for the AIRR schema definition objects.
 # See \link{write_airr_yaml} for writing AIRR data in YAML format.
-#
+# 
 # @examples
 # # Get path to the repertoire-example file
 # file <- system.file("extdata", "repertoire-example.yaml", package="airr")
-#
+# 
 # # Load data file
 # repr <- read_airr_yaml(file)
 read_airr_yaml <- function(file, validate=TRUE, model=TRUE) {
-
+  
   # YAML format
   data <- yaml::read_yaml(file)
 
@@ -189,55 +189,55 @@ read_airr_yaml <- function(file, validate=TRUE, model=TRUE) {
   if (validate) {
       valid <- validate_airr(data, model=model)
   }
-
+  
   return(data)
 }
 
 
 # Read an AIRR JSON file
-#
+# 
 # \code{read_airr_json} loads a JSON file containing AIRR Data Model records.
 #
 # @param    file      path to the JSON input file.
 # @param    validate  run schema validation if \code{TRUE}.
-# @param    model     if \code{TRUE} validate only AIRR DataFile defined objects. If \code{FALSE}
+# @param    model     if \code{TRUE} validate only AIRR DataFile defined objects. If \code{FALSE} 
 #                     attempt validation of all objects in \code{data}.
 #                     Ignored if \code{validate=FALSE}
 #
 # @return   A named nested \code{list} contained in the AIRR Data Model with the top-level
 #           names reflecting the individual AIRR objects.
 #
-# @seealso
+# @seealso  
 # See \link{Schema} for the AIRR schema object definition.
 # See \link{write_airr_json} for writing AIRR data in JSON format.
-#
+# 
 # @examples
 # # Get path to the rearrangement-example file
 # file <- system.file("extdata", "germline-example.json", package="airr")
-#
+# 
 # # Load data file
 # repr <- read_airr_json(file)
 read_airr_json <- function(file, validate=TRUE, model=TRUE) {
-
+  
   # Read JSON format
-  data <- jsonlite::fromJSON(file,
+  data <- jsonlite::fromJSON(file, 
                              simplifyVector=TRUE,
                              simplifyMatrix=FALSE,
                              simplifyDataFrame=FALSE,
                              flatten=FALSE)
-
+  
   # Validation. Warnings are thrown for fields for AIRR compliance failures
   if (validate) {
       valid <- validate_airr(data, model=model)
   }
-
+  
   return(data)
 }
 
 #### Write TSV ####
 
 #' Write an AIRR tabular data
-#'
+#' 
 #' \code{write_tabular} writes a TSV containing AIRR tabular records.
 #'
 #' @param    data    \code{data.frame} of Rearrangement data.
