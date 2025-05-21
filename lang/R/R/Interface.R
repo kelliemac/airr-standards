@@ -41,7 +41,7 @@ read_tabular <- function(file, schema, base=c("1", "0"), aux_types=NULL,...) {
     header <- names(suppressMessages(readr::read_tsv(file, n_max=1)))
     schema_fields <- intersect(names(schema), header)
     cast <- setNames(lapply(schema_fields, function(f) parsers[schema[f]$type]), schema_fields)
-    cast <- c(cast, list(.default = col_character()))                      
+    cast <- c(cast, list(.default = col_character()))
 
     if(!is.null(aux_types)){
         aux_types <- aux_types[names(aux_types) %in% header]
@@ -55,7 +55,7 @@ read_tabular <- function(file, schema, base=c("1", "0"), aux_types=NULL,...) {
     cast_sub_logical[logical_cols_idx] <- "character"  
     types_sub_logical <- do.call(readr::cols, cast_sub_logical)
                                     
-    # types <- do.call(readr::cols, cast)                              
+    # Read file
     data <- suppressMessages(readr::read_tsv(file, col_types=types_sub_logical, na=c("", "NA", "None"), ...))
 
     # Attempt to convert logical columns, checking if additional NAs are added by as.logical()
