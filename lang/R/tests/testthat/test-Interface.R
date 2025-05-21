@@ -35,11 +35,6 @@ expected_w <- c(
     "Warning: sequence_id is empty for row(s): 7",
     "Warning: productive is not logical for row(s): 1"
 )
-# expected_w <- c(
-#     "Warning: File is missing AIRR mandatory field(s): sequence",
-#     "Warning: sequence_id(s) are not unique: IVKNQEJ01AJ44V, IVKNQEJ01AJ44V",
-#     "Warning: sequence_id is empty for row(s): 7"
-# )
 
 
 
