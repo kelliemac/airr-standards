@@ -29,17 +29,17 @@ good_combined_json <- file.path(parent_path, "data-tests", "good_combined_airr.j
 good_combined_names <- c("Repertoire", "GermlineSet", "GenotypeSet")
 
 # Expected warnings for bad_rearrangement_file
-# expected_w <- c(
-#     "Warning: File is missing AIRR mandatory field(s): sequence",
-#     "Warning: sequence_id(s) are not unique: IVKNQEJ01AJ44V, IVKNQEJ01AJ44V",
-#     "Warning: sequence_id is empty for row(s): 7",
-#     "Warning: productive is not logical for row(s): 1"
-# )
 expected_w <- c(
     "Warning: File is missing AIRR mandatory field(s): sequence",
     "Warning: sequence_id(s) are not unique: IVKNQEJ01AJ44V, IVKNQEJ01AJ44V",
-    "Warning: sequence_id is empty for row(s): 7"
+    "Warning: sequence_id is empty for row(s): 7",
+    "Warning: productive is not logical for row(s): 1"
 )
+# expected_w <- c(
+#     "Warning: File is missing AIRR mandatory field(s): sequence",
+#     "Warning: sequence_id(s) are not unique: IVKNQEJ01AJ44V, IVKNQEJ01AJ44V",
+#     "Warning: sequence_id is empty for row(s): 7"
+# )
 
 
 
@@ -179,7 +179,7 @@ test_that("write_tabular writes a bad file, with warnings, with logicals T/T", {
     expect_equal(reload_tbl[['rev_comp']],
                 c("T","T","T","","T","T","T","T","T","T","T"))
     expect_equal(reload_tbl[['productive']],
-                 c("","T","F","T","T","F","F","F","T","T","T"))
+                 c("yes","T","F","T","T","F","F","F","T","T","T"))
 })
 
 #### Repertoire ####
@@ -198,7 +198,7 @@ test_that("read_airr with format=yaml loads a Repertoire", {
 
 test_that("write_airr writes a yaml Repertoire", {
     geno <- read_airr(good_repertoire_file, validate=T)
-    
+
     tmp_file <- tempfile(fileext=".yaml")
     write_airr(geno, tmp_file, validate=T, model=F)
     geno_tmp <- read_airr(tmp_file, validate=T, model=F)
@@ -207,7 +207,7 @@ test_that("write_airr writes a yaml Repertoire", {
 
 test_that("write_airr writes a json Repertoire", {
     geno <- read_airr(good_repertoire_file, validate=T)
-    
+
     tmp_file <- tempfile(fileext=".json")
     write_airr(geno, tmp_file, validate=T, model=F)
     geno_tmp <- read_airr(tmp_file, validate=T, model=F)
@@ -277,7 +277,7 @@ test_that("read_airr json and yaml load identical objects", {
 
 test_that("write_airr writes a combined yaml file", {
     repr <- read_airr(good_combined_yaml, validate=T)
-    
+
     tmp_file <- tempfile(fileext=".yaml")
     write_airr(repr, tmp_file, validate=T, model=F)
     repr_tmp <- read_airr(tmp_file, validate=T, model=F)
@@ -286,7 +286,7 @@ test_that("write_airr writes a combined yaml file", {
 
 test_that("write_airr writes a combined json file", {
     repr <- read_airr(good_combined_json, validate=T)
-    
+
     tmp_file <- tempfile(fileext=".json")
     write_airr(repr, tmp_file, validate=T, model=F)
     repr_tmp <- read_airr(tmp_file, validate=T, model=F)
@@ -295,15 +295,15 @@ test_that("write_airr writes a combined json file", {
 
 test_that("write_airr json and yaml writes identical objects", {
     repr <- read_airr(good_combined_yaml, validate=T)
-    
+
     tmp_yaml <- tempfile(fileext=".yaml")
     write_airr(repr, tmp_yaml, validate=T)
     repr_yaml <- read_airr(tmp_yaml, validate=T)
-    
+
     tmp_json <- tempfile(fileext=".json")
     write_airr(repr, tmp_json, validate=T)
     repr_json <- read_airr(tmp_json, validate=T)
-    
+
     expect_identical(repr_yaml, repr_json)
 })
 
@@ -340,7 +340,7 @@ test_that("write_airr yaml works with DataFile", {
                                "Skipping validation of non-DataFile object: Nonsense")
     expect_true("Nonsense" %in% names(repr_tmp))
     expect_identical(repr_extra, repr_tmp)
-    
+
     # Write with DataFile constraint
     expect_warning(write_airr(repr_extra, tmp_file, validate=T, model=T),
                    "Skipping validation of non-DataFile object: Nonsense")
@@ -354,7 +354,7 @@ test_that("write_airr json works with DataFile", {
     repr <- read_airr(good_combined_json, validate=F, model=F)
     repr_extra <- repr
     repr_extra[["Nonsense"]] <- list(list(id="id", data="data"))
-    
+
     # Write without DataFile constraint
     tmp_file <- tempfile(fileext=".json")
     expect_warning(write_airr(repr_extra, tmp_file, validate=T, model=F),
@@ -363,7 +363,7 @@ test_that("write_airr json works with DataFile", {
                                "Skipping validation of non-DataFile object: Nonsense")
     expect_true("Nonsense" %in% names(repr_tmp))
     expect_identical(repr_extra, repr_tmp)
-    
+
     # Write with DataFile constraint
     expect_warning(write_airr(repr_extra, tmp_file, validate=T, model=T),
                    "Skipping validation of non-DataFile object: Nonsense")
