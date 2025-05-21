@@ -1,7 +1,7 @@
 #### Read TSV ####
 
 #' Read AIRR tabular data
-#'
+#' 
 #' \code{read_tabular} reads a tab-delimited (TSV) file containing tabular AIRR records.
 #'
 #' @param    file        input file path.
@@ -23,7 +23,7 @@
 #' @seealso
 #' See \link{Schema} for the AIRR schema object definition.
 #' See \link{write_tabular} for writing AIRR data.
-#'
+#' 
 #' @examples
 #' # Get path to the rearrangement-example file
 #' file <- system.file("extdata", "rearrangement-example.tsv.gz", package="airr")
@@ -68,7 +68,7 @@ read_tabular <- function(file, schema, base=c("1", "0"), aux_types=NULL,...) {
 
     # Validate file
     valid_data <- validate_tabular(data, schema=schema)
-
+    
     # Adjust indexes
     if (base == "0") {
         start_positions <- grep("_start$", names(data), perl=TRUE)
@@ -83,7 +83,7 @@ read_tabular <- function(file, schema, base=c("1", "0"), aux_types=NULL,...) {
 
 #' @details
 #' \code{read_rearrangement} reads an AIRR TSV containing Rearrangement data.
-#'
+#' 
 #' @rdname read_tabular
 #' @export
 read_rearrangement <- function(file, base=c("1", "0"), ...) {
@@ -92,13 +92,13 @@ read_rearrangement <- function(file, base=c("1", "0"), ...) {
 
 #' @details
 #' \code{read_alignment} reads an AIRR TSV containing Alignment data.
-#'
+#' 
 #' @rdname read_tabular
 #' @export
 read_alignment <- function(file, base=c("1", "0"), ...) {
   msg <- paste("read_alignment is deprecated and will be removed in a future release.",
                "Use read_tabular with the argument schema=AlignmentSchema instead.",
-               "See help(\"Deprecated\")",
+               "See help(\"Deprecated\")", 
                sep="\n")
   .Deprecated(msg=msg)
   read_tabular(file, base=base, schema=AlignmentSchema, ...)
@@ -108,42 +108,42 @@ read_alignment <- function(file, base=c("1", "0"), ...) {
 #### Read YAML/JSON ####
 
 #' Read an AIRR Data Model file in YAML or JSON format
-#'
+#' 
 #' \code{read_airr} loads a YAML or JSON file containing AIRR Data Model records.
 #'
 #' @param    file      path to the input file.
 #' @param    format    format of the input file. Must be one of \code{"auto"}, \code{"yaml"}, or
-#'                     \code{"json"}. If \code{"auto"} (default), the format will be
+#'                     \code{"json"}. If \code{"auto"} (default), the format will be 
 #'                     detected from the \code{file} extension.
 #' @param    validate  run schema validation if \code{TRUE}.
-#' @param    model     if \code{TRUE} validate only AIRR DataFile defined objects. If \code{FALSE}
+#' @param    model     if \code{TRUE} validate only AIRR DataFile defined objects. If \code{FALSE} 
 #'                     attempt validation of all objects in \code{data}.
 #'                     Ignored if \code{validate=FALSE}
 #'
 #' @return   A named nested \code{list} contained in the AIRR Data Model with the top-level
 #'           names reflecting the individual AIRR objects.
-#'
-#' @seealso
+#'                   
+#' @seealso. 
 #' See \link{Schema} for the AIRR schema definition objects.
 #' See \link{write_airr} for writing AIRR Data Model records in YAML or JSON format.
-#'
+#' 
 #' @examples
 #' # Get path to the Reportoire and GermlineSet example files
 #' f1 <- system.file("extdata", "repertoire-example.yaml", package="airr")
 #' f2 <- system.file("extdata", "germline-example.json", package="airr")
-#'
+#' 
 #' # Load data files
 #' repertoire <- read_airr(f1)
 #' germline <- read_airr(f2)
-#'
+#' 
 #' @export
 read_airr <- function(file, format=c("auto", "yaml", "json"), validate=TRUE, model=TRUE) {
     # Check arguments
     format <- match.arg(format)
-
+    
     # Autodetect format
     if (format == "auto") { format <- tolower(tools::file_ext(file)) }
-
+    
     # Load data
     if (format == "yaml") {
         records <- read_airr_yaml(file, validate=validate, model=model)
@@ -152,7 +152,7 @@ read_airr <- function(file, format=c("auto", "yaml", "json"), validate=TRUE, mod
     } else {
         stop("Unrecognized file extension ", format, "; must be either .json or .yaml.")
     }
-
+    
     # Return
     return(records)
 }
