@@ -41,7 +41,7 @@ read_tabular <- function(file, schema, base=c("1", "0"), aux_types=NULL,...) {
     header <- names(suppressMessages(readr::read_tsv(file, n_max=1)))
     schema_fields <- intersect(names(schema), header)
     cast <- setNames(lapply(schema_fields, function(f) parsers[schema[f]$type]), schema_fields)
-    cast <- c(cast, list(.default = col_character()))
+    cast <- c(cast, list(.default = col_character()))                      
 
     if(!is.null(aux_types)){
         aux_types <- aux_types[names(aux_types) %in% header]
@@ -49,11 +49,28 @@ read_tabular <- function(file, schema, base=c("1", "0"), aux_types=NULL,...) {
         cast <- c(cast, aux_cols)
     }
 
-    types <- do.call(readr::cols, cast)
+    # temporarily treat logical columns as character, to avoid silent NA conversion
+    logical_cols_idx <- which(types_temp == "logical")
+    cast_sub_logical <- cast
+    cast_sub_logical[logical_cols_idx] <- "character"  
+    types_sub_logical <- do.call(readr::cols, cast_sub_logical)
+                                    
+    # types <- do.call(readr::cols, cast)                              
+    data <- suppressMessages(readr::read_tsv(file, col_types=types_sub_logical, na=c("", "NA", "None"), ...))
 
-    # Read file
-    data <- suppressMessages(readr::read_tsv(file, col_types=types, na=c("", "NA", "None"), ...))
-    
+    # Attempt to convert logical columns, checking if additional NAs are added by as.logical()
+    for (i in logical_cols_idx) {
+        na_count_before <- sum(is.na(data[[i]]))
+        data[[i]] <- as.logical(data[[i]])
+        na_count_after <- sum(is.na(data[[i]]))
+        if (na_count_before != na_count_after) {
+            stop(paste("Issue treating column", names(cast_sub_logical[i]), "as logical;",
+                       "values must be one of 'T', 'TRUE', 'True', or 'true' to be regarded as true;",
+                       "'F', 'FALSE', 'False', or 'false' to be regarded as false;",
+                       "or '', 'NA', or 'None' to be regarded as missing"))
+        }
+    }
+                                    
     # Validate file
     valid_data <- validate_tabular(data, schema=schema)
     
