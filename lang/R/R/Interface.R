@@ -57,7 +57,7 @@ read_tabular <- function(file, schema, base=c("1", "0"), aux_types=NULL,...) {
 
     # Read file
     data <- suppressMessages(readr::read_tsv(file, col_types=types_sub_logical, na=c("", "NA", "None"), ...))
-
+    
     # Attempt to set type of logical columns
     allowed_logical_characters <- c('T', 'TRUE', 'True', 'true', 'F', 'FALSE', 'False', 'false', NA)
     for (c in logical_cols) {
@@ -166,10 +166,10 @@ read_airr <- function(file, format=c("auto", "yaml", "json"), validate=TRUE, mod
 # @param    model     if \code{TRUE} validate only AIRR DataFile defined objects. If \code{FALSE} 
 #                     attempt validation of all objects in \code{data}.
 #                     Ignored if \code{validate=FALSE}
-#
+#                      
 # @return   A named nested \code{list} contained in the AIRR Data Model with the top-level
 #           names reflecting the individual AIRR objects.
-#
+#                      
 # @seealso  
 # See \link{Schema} for the AIRR schema definition objects.
 # See \link{write_airr_yaml} for writing AIRR data in YAML format.
@@ -206,7 +206,7 @@ read_airr_yaml <- function(file, validate=TRUE, model=TRUE) {
 #
 # @return   A named nested \code{list} contained in the AIRR Data Model with the top-level
 #           names reflecting the individual AIRR objects.
-#
+#                      
 # @seealso  
 # See \link{Schema} for the AIRR schema object definition.
 # See \link{write_airr_json} for writing AIRR data in JSON format.
@@ -460,7 +460,7 @@ write_airr_yaml <- function(data, file, validate=TRUE, model=TRUE) {
 # 
 # # Load data file
 # repr <- read_airr(germline)
-#
+# 
 # # Write a Rearrangement data file
 # outfile <- file.path(tempdir(), "output.json")
 # write_airr_json(repr, outfile)
@@ -518,7 +518,7 @@ validate_tabular <- function(data, schema) {
                       paste(missing_fields, collapse = ", ")))
     }
     
-    # Validate sequence_id:
+    # Validate sequence_id: 
     # - uniqueness
     # - not empty
     if ("sequence_id" %in% colnames(data)) {
@@ -533,12 +533,12 @@ validate_tabular <- function(data, schema) {
             # TODO
             # valid <- FALSE
             warning(paste("Warning: sequence_id is empty for row(s):",
-                          paste(empty_rows, collapse = ", ")))
+                          paste(empty_rows, collapse = ", ")))            
         }
     }
     
     # check logical fields
-    logical_fields <- names(which(sapply(schema@properties,
+    logical_fields <- names(which(sapply(schema@properties, 
                                          '[[', "type") == "logical"))
     logical_fields <- intersect(colnames(data), logical_fields)
     if (length(logical_fields) > 0 ) {
@@ -546,7 +546,7 @@ validate_tabular <- function(data, schema) {
             not_logical <- data[[log_field]] %in% c(TRUE, FALSE, NA, "TRUE", "True", "true", "T", "FALSE", "False", "false", "F") == FALSE
             if (any(not_logical)) {
                 warning(paste("Warning:", log_field, "is not logical for row(s):",
-                              paste(which(not_logical), collapse = ", ")))
+                              paste(which(not_logical), collapse = ", ")))             
             } else {
                 NULL
             }
@@ -582,7 +582,7 @@ validate_rearrangement <- function(data) {
 #' @return   Returns \code{TRUE} if the input \code{data} is compliant with AIRR standards and
 #'           \code{FALSE} if not. If \code{each=TRUE} is set, then a vector with results for each
 #'           each object in \code{data} is returned instead.
-#'
+#'                   
 #' @seealso  
 #' See \link{Schema} for the AIRR schema definitions.
 #' See \link{read_airr} for loading AIRR Data Models from a file.
@@ -617,18 +617,18 @@ validate_airr <- function(data, model=TRUE, each=FALSE) {
         if (is.null(entry)) { next }
 
         # Check for non-DataFile objects
-        if (model && !(n %in% names(DataFileSchema@properties))) {
+        if (model && !(n %in% names(DataFileSchema@properties))) { 
             warning('Skipping validation of non-DataFile object: ', n)
-            next
+            next 
         }
-
+        
         # Load schema
-        if (n %in% names(AIRRSchema)) {
-            schema <- AIRRSchema[[n]]
-        } else {
+        if (n %in% names(AIRRSchema)) { 
+            schema <- AIRRSchema[[n]] 
+        } else { 
             schema <- tryCatch(load_schema(n), error=function(e) NULL)
         }
-
+        
         # Fail invalid schema
         if (is.null(schema)) {
             warning('Unrecognized schema: ', n)
@@ -637,7 +637,7 @@ validate_airr <- function(data, model=TRUE, each=FALSE) {
             # Recursively validate all entries
             valid <- sapply(entry, validate_entry, schema=schema)
         }
-
+        
         # Store check result
         valid_sum <- append(setNames(all(valid), n), valid_sum)
     }
@@ -671,7 +671,7 @@ validate_entry <- function(entry, schema) {
     for(f in names(entry)) {
         # get the reference scheme
         reference_schemes <- schema[f]$ref
-
+        
         # simple recursive (reference scheme in 1st level)
         # in this case the type on the 1st level is NULL
         if (is.na(schema[f][["type"]]) || is.null(schema[f][["type"]])) {
