@@ -169,7 +169,7 @@ read_airr <- function(file, format=c("auto", "yaml", "json"), validate=TRUE, mod
 #                      
 # @return   A named nested \code{list} contained in the AIRR Data Model with the top-level
 #           names reflecting the individual AIRR objects.
-#                      
+#                   
 # @seealso  
 # See \link{Schema} for the AIRR schema definition objects.
 # See \link{write_airr_yaml} for writing AIRR data in YAML format.
