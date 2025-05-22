@@ -206,7 +206,7 @@ read_airr_yaml <- function(file, validate=TRUE, model=TRUE) {
 #
 # @return   A named nested \code{list} contained in the AIRR Data Model with the top-level
 #           names reflecting the individual AIRR objects.
-#                      
+#                   
 # @seealso  
 # See \link{Schema} for the AIRR schema object definition.
 # See \link{write_airr_json} for writing AIRR data in JSON format.
@@ -533,7 +533,7 @@ validate_tabular <- function(data, schema) {
             # TODO
             # valid <- FALSE
             warning(paste("Warning: sequence_id is empty for row(s):",
-                          paste(empty_rows, collapse = ", ")))            
+                          paste(empty_rows, collapse = ", ")))           
         }
     }
     
@@ -546,7 +546,7 @@ validate_tabular <- function(data, schema) {
             not_logical <- data[[log_field]] %in% c(TRUE, FALSE, NA, "TRUE", "True", "true", "T", "FALSE", "False", "false", "F") == FALSE
             if (any(not_logical)) {
                 warning(paste("Warning:", log_field, "is not logical for row(s):",
-                              paste(which(not_logical), collapse = ", ")))             
+                              paste(which(not_logical), collapse = ", ")))            
             } else {
                 NULL
             }
